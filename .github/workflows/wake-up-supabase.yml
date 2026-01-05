@@ -1,0 +1,20 @@
+name: Wake Up Supabase
+     
+on:
+  schedule:
+  # Runs every 4 hours from Monday to Friday
+    - cron: "0 */4 * * 1-5"
+  # Allows manual triggering from the Actions tab for testing
+  workflow_dispatch:
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run my script
+        run: echo "Scheduled job ran at $(date -u)"
+      - name: Ping Supabase Database
+        run: |
+          curl -X GET "${{ secrets.SUPABASE_URL }}/rest/v1/anon_rest?select=id&limit=1" \
+          -H "apikey: ${{ secrets.SUPABASE_KEY }}" \
+          -H "Authorization: Bearer ${{ secrets.SUPABASE_KEY }}"
